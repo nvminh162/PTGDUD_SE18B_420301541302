@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import editIcon from '../assets/Download.png';
 
-const Datatable = () => {
+const Datatable = ({ isAddModalOpen, setIsAddModalOpen }) => {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,7 +11,7 @@ const Datatable = () => {
   const [resultsCount, setResultsCount] = useState(0);
   
   // Edit modal state
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
@@ -20,6 +20,9 @@ const Datatable = () => {
     orderDate: '',
     status: ''
   });
+
+  // Initial default avatar for new users
+  const defaultAvatar = '../src/assets/Avatar.png';
 
   // Load data from API
   const fetchData = async () => {
@@ -99,7 +102,7 @@ const Datatable = () => {
       orderDate: customer.orderDate || '',
       status: customer.status || ''
     });
-    setIsModalOpen(true);
+    setIsEditModalOpen(true);
   };
 
   // Handle form input changes
@@ -111,8 +114,22 @@ const Datatable = () => {
     });
   };
 
-  // Save changes with PUT request
-  const handleSave = async () => {
+  // Reset form data for new user
+  useEffect(() => {
+    if (isAddModalOpen) {
+      // Reset form for new user
+      setFormData({
+        name: '',
+        company: '',
+        orderValue: '$',
+        orderDate: new Date().toLocaleDateString('en-GB'), // Current date in DD/MM/YYYY format
+        status: 'New'
+      });
+    }
+  }, [isAddModalOpen]);
+
+  // Save changes with PUT request for existing user
+  const handleSaveEdit = async () => {
     if (!editingCustomer) return;
     
     try {
@@ -138,7 +155,7 @@ const Datatable = () => {
       }
       
       // Close modal and refresh data
-      setIsModalOpen(false);
+      setIsEditModalOpen(false);
       setEditingCustomer(null);
       await fetchData();
       
@@ -150,13 +167,53 @@ const Datatable = () => {
     }
   };
 
-  // Cancel editing
-  const handleCancel = () => {
-    setIsModalOpen(false);
+  // Add new user with POST request
+  const handleAddUser = async () => {
+    try {
+      setLoading(true);
+      
+      const response = await fetch('https://67f940a7094de2fe6ea0f7b2.mockapi.io/book', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          company: formData.company,
+          orderValue: formData.orderValue,
+          orderDate: formData.orderDate,
+          status: formData.status,
+          avatar: defaultAvatar // Use default avatar for new users
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API request failed with status: ${response.status}`);
+      }
+      
+      // Close modal and refresh data
+      setIsAddModalOpen(false);
+      await fetchData();
+      
+    } catch (err) {
+      setError(err.message || 'Failed to add new user');
+      console.error('Error adding new user:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Cancel editing or adding
+  const handleCancelEdit = () => {
+    setIsEditModalOpen(false);
     setEditingCustomer(null);
   };
 
-  if (loading && !isModalOpen) {
+  const handleCancelAdd = () => {
+    setIsAddModalOpen(false);
+  };
+
+  if (loading && !isEditModalOpen && !isAddModalOpen) {
     return (
       <div className="bg-white rounded-lg border border-gray-200">
         <div className="grid grid-cols-8 gap-4 p-4 bg-gray-50 border-b border-gray-200">
@@ -193,7 +250,7 @@ const Datatable = () => {
     );
   }
 
-  if (error && !isModalOpen) {
+  if (error && !isEditModalOpen && !isAddModalOpen) {
     return (
       <div className="bg-white rounded-lg border border-gray-200 p-4">
         <div className="bg-red-50 p-4 rounded-lg text-red-700">
@@ -212,13 +269,13 @@ const Datatable = () => {
   return (
     <div className="relative">
       {/* Edit Modal */}
-      {isModalOpen && editingCustomer && (
+      {isEditModalOpen && editingCustomer && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-medium">Edit Customer</h3>
               <button 
-                onClick={handleCancel}
+                onClick={handleCancelEdit}
                 className="text-gray-400 hover:text-gray-600"
               >
                 ✕
@@ -287,17 +344,117 @@ const Datatable = () => {
             
             <div className="flex justify-end gap-3 mt-6">
               <button
-                onClick={handleCancel}
+                onClick={handleCancelEdit}
                 className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
               >
                 Cancel
               </button>
               <button
-                onClick={handleSave}
+                onClick={handleSaveEdit}
                 className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600"
                 disabled={loading}
               >
                 {loading ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add User Modal */}
+      {isAddModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-medium">Add New Customer</h3>
+              <button 
+                onClick={handleCancelAdd}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500"
+                  placeholder="Enter customer name"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Company *</label>
+                <input
+                  type="text"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500"
+                  placeholder="Enter company name"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Order Value *</label>
+                <input
+                  type="text"
+                  name="orderValue"
+                  value={formData.orderValue}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500"
+                  placeholder="$0"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Order Date</label>
+                <input
+                  type="text"
+                  name="orderDate"
+                  value={formData.orderDate}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500"
+                  placeholder="DD/MM/YYYY"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <select
+                  name="status"
+                  value={formData.status}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-pink-500"
+                >
+                  <option value="New">New</option>
+                  <option value="In-progress">In-progress</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                onClick={handleCancelAdd}
+                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAddUser}
+                className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600"
+                disabled={loading || !formData.name || !formData.company}
+              >
+                {loading ? 'Adding...' : 'Add Customer'}
               </button>
             </div>
           </div>
@@ -325,51 +482,57 @@ const Datatable = () => {
         </div>
 
         {/* Table body */}
-        {customers.map((customer) => (
-          <div 
-            key={customer.id} 
-            className="grid grid-cols-8 gap-4 px-4 py-3 border-b border-gray-200 items-center hover:bg-gray-50"
-          >
-            <div className="flex items-center justify-center">
-              <input
-                type="checkbox"
-                checked={selectedRows.includes(customer.id)}
-                onChange={() => handleSelectRow(customer.id)}
-                className="w-4 h-4 rounded border-gray-300 text-pink-500 focus:ring-pink-500"
-              />
-            </div>
-            <div className="col-span-2 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
-                <img 
-                  src={customer.avatar} 
-                  alt={customer.name} 
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = 'https://via.placeholder.com/40';
-                  }}
+        {customers.length === 0 ? (
+          <div className="p-6 text-center text-gray-500">
+            No customers found. Add a new customer to get started.
+          </div>
+        ) : (
+          customers.map((customer) => (
+            <div 
+              key={customer.id} 
+              className="grid grid-cols-8 gap-4 px-4 py-3 border-b border-gray-200 items-center hover:bg-gray-50"
+            >
+              <div className="flex items-center justify-center">
+                <input
+                  type="checkbox"
+                  checked={selectedRows.includes(customer.id)}
+                  onChange={() => handleSelectRow(customer.id)}
+                  className="w-4 h-4 rounded border-gray-300 text-pink-500 focus:ring-pink-500"
                 />
               </div>
-              <span className="font-medium text-gray-800">{customer.name}</span>
+              <div className="col-span-2 flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
+                  <img 
+                    src={customer.avatar} 
+                    alt={customer.name} 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://via.placeholder.com/40';
+                    }}
+                  />
+                </div>
+                <span className="font-medium text-gray-800">{customer.name}</span>
+              </div>
+              <div className="text-gray-600">{customer.company}</div>
+              <div className="font-medium text-gray-800">{customer.orderValue}</div>
+              <div className="text-gray-600">{customer.orderDate}</div>
+              <div>
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusStyle(customer.status)}`}>
+                  {customer.status}
+                </span>
+              </div>
+              <div className="text-right">
+                <button 
+                  className="p-1 hover:bg-gray-100 rounded"
+                  onClick={() => handleEdit(customer)}
+                >
+                  <img src={editIcon} alt="Edit" className="w-4 h-4" />
+                </button>
+              </div>
             </div>
-            <div className="text-gray-600">{customer.company}</div>
-            <div className="font-medium text-gray-800">{customer.orderValue}</div>
-            <div className="text-gray-600">{customer.orderDate}</div>
-            <div>
-              <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusStyle(customer.status)}`}>
-                {customer.status}
-              </span>
-            </div>
-            <div className="text-right">
-              <button 
-                className="p-1 hover:bg-gray-100 rounded"
-                onClick={() => handleEdit(customer)}
-              >
-                <img src={editIcon} alt="Edit" className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        ))}
+          ))
+        )}
 
         {/* Pagination */}
         <div className="flex justify-between items-center px-4 py-3 bg-white border-t border-gray-200">

@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import Datatable from '../components/Datatable';
 import analyticsIcon from '../assets/create.png';
-import importIcon from '../assets/Bell 1.png';
-import exportIcon from '../assets/create.png';
+import importIcon from '../assets/Download.png';
+import exportIcon from '../assets/Download.png';
 
 const Dashboard = () => {
   const [overviewData, setOverviewData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false); // New state for Add User modal
 
   useEffect(() => {
     const fetchOverviewData = async () => {
@@ -94,7 +95,10 @@ const Dashboard = () => {
             <h2 className="text-lg font-semibold">Detailed report</h2>
           </div>
           <div className="flex space-x-2">
-            <button className="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50">
+            <button 
+              className="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50"
+              onClick={() => setIsAddModalOpen(true)} // Open add user modal
+            >
               <img src={importIcon} alt="" className="w-5 h-5" />
               <span>Import</span>
             </button>
@@ -105,8 +109,8 @@ const Dashboard = () => {
           </div>
         </div>
         
-        {/* Datatable component */}
-        <Datatable />
+        {/* Datatable component with the isAddModalOpen prop */}
+        <Datatable isAddModalOpen={isAddModalOpen} setIsAddModalOpen={setIsAddModalOpen} />
       </div>
     </>
   );
