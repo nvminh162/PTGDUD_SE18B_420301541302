@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Datatable from './Datatable';
 
 // Import your icons and images
 import logoImg from '../assets/Image 1858.png';
@@ -13,6 +14,8 @@ import analyticsIcon from '../assets/create.png';
 import messagesIcon from '../assets/Chat.png';
 import integrationsIcon from '../assets/Code.png';
 import promoImg from '../assets/Group.png';
+import importIcon from '../assets/Download.png';
+import exportIcon from '../assets/Download.png';
 
 function Layout() {
   const [activeNav, setActiveNav] = useState('dashboard');
@@ -228,9 +231,8 @@ function Layout() {
             </div>
           </div>
 
-          {/* Detailed report section - kept as placeholder */}
+          {/* Detailed report section */}
           <div>
-            {/* Header section with same styling as before */}
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center">
                 <img src={analyticsIcon} alt="" className="w-5 h-5 mr-2" />
@@ -238,19 +240,18 @@ function Layout() {
               </div>
               <div className="flex space-x-2">
                 <button className="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50">
+                  <img src={importIcon} alt="" className="w-5 h-5" />
                   <span>Import</span>
                 </button>
                 <button className="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50">
+                  <img src={exportIcon} alt="" className="w-5 h-5" />
                   <span>Export</span>
                 </button>
               </div>
             </div>
             
-            {/* Table placeholder (same as before) */}
-            <div className="bg-white rounded-lg border border-gray-200">
-              {/* Table header and content will be implemented in the next section */}
-              <div className="p-4 text-gray-500 text-center">Table content will be implemented in the next step</div>
-            </div>
+            {/* Datatable component */}
+            <Datatable />
           </div>
         </div>
       </div>
