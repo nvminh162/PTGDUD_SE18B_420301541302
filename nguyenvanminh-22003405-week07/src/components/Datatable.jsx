@@ -10,17 +10,23 @@ const Datatable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [resultsCount, setResultsCount] = useState(0);
 
-  // Load data from JSON file
+  // Load data from API
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await import('../../data/customersData.json');
-        setCustomers(response.default);
-        setResultsCount(response.default.length);
+        const response = await fetch('https://67f940a7094de2fe6ea0f7b2.mockapi.io/book');
+        
+        if (!response.ok) {
+          throw new Error(`API request failed with status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        setCustomers(data);
+        setResultsCount(data.length);
         setError(null);
       } catch (err) {
-        setError('Failed to load customer data');
+        setError(err.message || 'Failed to load customer data');
         console.error('Error loading customer data:', err);
       } finally {
         setLoading(false);
@@ -55,7 +61,7 @@ const Datatable = () => {
 
   // Get status style based on status value
   const getStatusStyle = (status) => {
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case 'new':
         return 'bg-blue-50 text-blue-600';
       case 'in-progress':
