@@ -25,6 +25,18 @@ function App() {
     // Lọc ra các công việc có id khác với id cần xóa
     setTodos(todos.filter(todo => todo.id !== id));
   };
+
+  // Hàm để toggle trạng thái hoàn thành của công việc
+  const toggleComplete = (id) => {
+    setTodos(
+      todos.map(todo => {
+        if (todo.id === id) {
+          return { ...todo, completed: !todo.completed };
+        }
+        return todo;
+      })
+    );
+  };
   
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -63,7 +75,7 @@ function App() {
             </div>
             
             {/* Todo List Section */}
-            <TodoList todos={todos} deleteTodo={deleteTodo} />
+            <TodoList todos={todos} deleteTodo={deleteTodo} toggleComplete={toggleComplete} />
           </div>
         </div>
       </main>

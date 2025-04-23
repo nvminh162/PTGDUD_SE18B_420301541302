@@ -1,7 +1,7 @@
 import React from "react";
 import TodoItem from "./TodoItem";
 
-const TodoList = ({ todos, deleteTodo }) => {
+const TodoList = ({ todos, deleteTodo, toggleComplete }) => {
   return (
     <div className="mt-6">
       <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
@@ -22,6 +22,7 @@ const TodoList = ({ todos, deleteTodo }) => {
               key={todo.id} 
               todo={todo} 
               deleteTodo={deleteTodo} 
+              toggleComplete={toggleComplete}
             />
           ))}
         </div>
