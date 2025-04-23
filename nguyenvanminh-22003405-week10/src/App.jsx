@@ -2,11 +2,23 @@ import React, { useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import TodoList from "./components/TodoList";
+import TodoForm from "./components/TodoForm";
 import { mockTodos } from "./data/mockData";
-import "./App.css";
 
 function App() {
   const [todos, setTodos] = useState(mockTodos);
+  
+  // Hàm để thêm công việc mới
+  const addTodo = (title) => {
+    const newTodo = {
+      id: Date.now(), // Sử dụng timestamp làm id (unique)
+      title: title,
+      completed: false,
+    };
+    
+    // Thêm công việc mới vào đầu danh sách
+    setTodos([newTodo, ...todos]);
+  };
   
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -31,6 +43,17 @@ function App() {
                   <span className="text-gray-700">{todos.filter(todo => todo.completed).length}</span>
                 </p>
               </div>
+            </div>
+            
+            {/* Todo Form Section */}
+            <div className="py-2">
+              <h2 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Thêm công việc mới
+              </h2>
+              <TodoForm addTodo={addTodo} />
             </div>
             
             {/* Todo List Section */}
