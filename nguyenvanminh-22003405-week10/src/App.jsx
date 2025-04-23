@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import TodoList from "./components/TodoList";
 import TodoForm from "./components/TodoForm";
+import TodoStats from "./components/TodoStats";
 import FilterButtons from "./components/FilterButtons";
 import { mockTodos } from "./data/mockData";
 
@@ -55,21 +56,16 @@ function App() {
         <div className="bg-white rounded-xl shadow-lg p-6 animate-fade-in">
           <div className="space-y-6">
             {/* Task Summary Section */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-gray-200">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 mb-1">Quản lý công việc</h1>
-                <p className="text-sm text-gray-500">Dễ dàng theo dõi và quản lý các công việc của bạn</p>
+            <div className="pb-4 border-b border-gray-200">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-900 mb-1">Quản lý công việc</h1>
+                  <p className="text-sm text-gray-500">Dễ dàng theo dõi và quản lý các công việc của bạn</p>
+                </div>
               </div>
               
-              <div className="mt-4 sm:mt-0 px-4 py-2 bg-purple-50 rounded-lg border border-purple-100">
-                <p className="text-sm font-medium">
-                  <span className="text-purple-700">Tổng số: </span>
-                  <span className="text-gray-700">{todos.length}</span>
-                  <span className="mx-2 text-gray-300">|</span>
-                  <span className="text-green-600">Hoàn thành: </span>
-                  <span className="text-gray-700">{todos.filter(todo => todo.completed).length}</span>
-                </p>
-              </div>
+              {/* Todo Stats Section */}
+              <TodoStats todos={todos} />
             </div>
             
             {/* Todo Form Section */}
