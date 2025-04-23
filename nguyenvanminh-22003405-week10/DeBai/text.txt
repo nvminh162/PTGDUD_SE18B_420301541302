@@ -49,3 +49,23 @@ Yêu cầu chức năng (Mỗi chức năng tương ứng 1 commit):
 Chú ý:
 - Được sử dụng tất cả các tài liệu để làm việc
 - Commit bằng chính email của sinh viên
+
+script prompt AI
+
+1. Tôi sẽ cung cấp cho yêu cầu, trước tiên bạn chỉ đọc và không làm gì hết trong project của tôi
+Bạn hiểu chưa?
+```
+```
+Tôi sẽ gửi lại từng yêu cầu bạn làm theo trình tự tôi yêu cầu
+
+2. Tốt lắm
+trước tiên tôi đã cài thư viện tailwindcss 4.0 vào dự án
+bạn hãy giúp tôi:
+
+Yêu cầu thêm giao diện đẹp, hiện đại, nhiều hiệu ứng đẹp,
+header tên logo là AppName
+footer là thông tin: Nguyễn Văn Minh - 22003405
+chia components hợp lý
+
+10. Hãy xem toàn bộ project và giúp tôi nâng cấp giao diện đẹp hơn, sử dụng thêm và hiệu ứng motion khi thao tác, cài thêm thư viện Toast message để thông báo khi thao tác nghiệp vụ,... làm thêm bất cứ điều gì bạn cho là đẹp
+Đẹp nhất có thể cho tôi nhé!
