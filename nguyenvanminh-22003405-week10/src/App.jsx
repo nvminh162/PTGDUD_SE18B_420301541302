@@ -19,6 +19,12 @@ function App() {
     // Thêm công việc mới vào đầu danh sách
     setTodos([newTodo, ...todos]);
   };
+
+  // Hàm để xóa công việc
+  const deleteTodo = (id) => {
+    // Lọc ra các công việc có id khác với id cần xóa
+    setTodos(todos.filter(todo => todo.id !== id));
+  };
   
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -57,7 +63,7 @@ function App() {
             </div>
             
             {/* Todo List Section */}
-            <TodoList todos={todos} />
+            <TodoList todos={todos} deleteTodo={deleteTodo} />
           </div>
         </div>
       </main>

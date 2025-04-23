@@ -1,7 +1,7 @@
 import React from "react";
 import TodoItem from "./TodoItem";
 
-const TodoList = ({ todos }) => {
+const TodoList = ({ todos, deleteTodo }) => {
   return (
     <div className="mt-6">
       <h2 className="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
@@ -18,7 +18,11 @@ const TodoList = ({ todos }) => {
       ) : (
         <div className="space-y-2">
           {todos.map((todo) => (
-            <TodoItem key={todo.id} todo={todo} />
+            <TodoItem 
+              key={todo.id} 
+              todo={todo} 
+              deleteTodo={deleteTodo} 
+            />
           ))}
         </div>
       )}
