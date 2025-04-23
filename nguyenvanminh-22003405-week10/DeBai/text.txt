@@ -1,0 +1,51 @@
+Đề Kiểm tra Phát triển giao diện ứng dụng – Thời gian 60 phút
+
+Đề bài:
+
+Xây dựng một ứng dụng quản lý công việc (To-Do List) đơn giản với các yêu cầu sau:
+
+Yêu cầu chức năng (Mỗi chức năng tương ứng 1 commit):
+
+1. Tạo cấu trúc dự án ReactJS (dùng Vite hoặc Create React App).
+   - Tạo minh chứng
+   - Commit feature: tạo trúc dự án ReactJS
+2. Tạo giao diện hiển thị danh sách công việc mẫu (mock data).
+   - Hiển thị tên công việc, trạng thái (hoàn thành/chưa), và nút xoá.
+   - Tạo minh chứng
+   - Commit feature: hiển thị danh sách công việc mẫu
+3. Thêm tính năng thêm công việc mới.
+   - Có ô input và nút "Thêm"
+   - Tạo minh chứng
+   - Commit feature: thêm công việc mới
+4. Xoá công việc.
+   - Khi bấm nút xoá, công việc bị loại khỏi danh sách
+   - Tạo minh chứng
+   - Commit feature: xoá công việc
+5. Đánh dấu hoàn thành/chưa hoàn thành công việc.
+   - Dùng checkbox hoặc nút toggle
+   - Tạo minh chứng
+   - Commit feature: toggle hoàn thành công việc
+6. Lọc danh sách công việc (Tất cả / Đã hoàn thành / Chưa hoàn thành).
+   - Có 3 nút lọc
+   - Tạo minh chứng
+   - Commit feature: lọc danh sách công việc
+7. Hiển thị tổng số và số công việc hoàn thành.
+   - Ví dụ: Tổng: 5 | Hoàn thành: 2
+   - Tạo minh chứng
+   - Commit feature: hiển thị tổng số công việc
+8. Lưu danh sách công việc vào LocalStorage.
+   - Khi load lại trang vẫn còn danh sách
+   - Tạo minh chứng
+   - Commit feature: lưu và tải công việc từ localStorage
+9. Tạo component riêng cho từng công việc (TodoItem).
+   - Tách logic xử lý và props truyền vào
+   - Tạo minh chứng
+   - Commit feature: tách component TodoItem
+10. Tạo giao diện đẹp hơn bằng CSS hoặc thư viện UI (Bootstrap/Tailwind).
+    - Không bắt buộc phải quá đẹp, nhưng có cần chỉnh bố cục.
+    - Tạo minh chứng
+    - Commit feature: cải thiện giao diện
+
+Chú ý:
+- Được sử dụng tất cả các tài liệu để làm việc
+- Commit bằng chính email của sinh viên
