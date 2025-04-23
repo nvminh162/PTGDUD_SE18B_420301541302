@@ -1,52 +1,100 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { FaPlus, FaTimes } from "react-icons/fa";
 
-const TodoForm = ({ addTodo }) => {
+const TodoForm = ({ addTodo, darkMode }) => {
   const [newTodoTitle, setNewTodoTitle] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
   
   const handleSubmit = (e) => {
     e.preventDefault();
     if (newTodoTitle.trim() !== "") {
       addTodo(newTodoTitle.trim());
       setNewTodoTitle("");
+      setIsTyping(false);
     }
+  };
+  
+  const handleChange = (e) => {
+    setNewTodoTitle(e.target.value);
+    setIsTyping(e.target.value.trim() !== "");
+  };
+  
+  const clearInput = () => {
+    setNewTodoTitle("");
+    setIsTyping(false);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-6">
+    <motion.form 
+      onSubmit={handleSubmit} 
+      className="mb-6"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-grow">
           <input
             type="text"
             value={newTodoTitle}
-            onChange={(e) => setNewTodoTitle(e.target.value)}
+            onChange={handleChange}
             placeholder="Nhập công việc mới..."
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 pl-10"
+            className={`w-full px-4 py-3 border rounded-lg transition-all duration-300 pl-10
+                      ${darkMode 
+                        ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:border-purple-500' 
+                        : 'border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500'
+                      }`}
             autoFocus
           />
-          <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
+          <span className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${darkMode ? 'text-gray-400' : 'text-gray-400'}`}>
+            <FaPlus className="h-4 w-4" />
           </span>
+          
+          {isTyping && (
+            <motion.button
+              type="button"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              whileHover={{ scale: 1.2 }}
+              onClick={clearInput}
+              className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${darkMode ? 'text-gray-400' : 'text-gray-500'} hover:text-gray-700 focus:outline-none`}
+            >
+              <FaTimes className="h-4 w-4" />
+            </motion.button>
+          )}
         </div>
         
-        <button
+        <motion.button
           type="submit"
-          className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-500 text-white font-medium rounded-lg hover:from-purple-700 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className={`px-6 py-3 ${darkMode 
+            ? 'bg-gradient-to-r from-purple-700 to-blue-700 hover:from-purple-800 hover:to-blue-800' 
+            : 'bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600'
+          } text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-300 flex items-center justify-center shine`}
+          disabled={!isTyping}
         >
           <span>Thêm</span>
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
-          </svg>
-        </button>
+          <FaPlus className="ml-2" />
+        </motion.button>
       </div>
       
-      {newTodoTitle.trim() !== "" && (
-        <div className="mt-2 text-sm text-green-600 animate-pulse">
-          <p>Nhấn Enter hoặc nút Thêm để tạo công việc mới</p>
-        </div>
-      )}
-    </form>
+      <motion.div
+        initial={{ opacity: 0, height: 0 }}
+        animate={{ 
+          opacity: isTyping ? 1 : 0,
+          height: isTyping ? 'auto' : 0
+        }}
+        transition={{ duration: 0.3 }}
+      >
+        {newTodoTitle.trim() !== "" && (
+          <div className={`mt-2 text-sm ${darkMode ? 'text-green-400' : 'text-green-600'} animate-pulse`}>
+            <p>Nhấn Enter hoặc nút Thêm để tạo công việc mới</p>
+          </div>
+        )}
+      </motion.div>
+    </motion.form>
   );
 };
 
