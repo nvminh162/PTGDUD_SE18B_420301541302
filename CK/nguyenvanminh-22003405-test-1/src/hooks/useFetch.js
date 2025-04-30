@@ -14,7 +14,7 @@ const useFetch = (url, options = {}) => {
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
-
+    
     const fetchData = async () => {
       setLoading(true);
       
