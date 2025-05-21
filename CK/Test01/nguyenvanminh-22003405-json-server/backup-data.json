@@ -1,0 +1,25 @@
+{
+  "products": [
+    {
+      "id": "skopee1",
+      "name": "iPhone 12 Pro Max",
+      "price": 1000000,
+      "description": "Nisi fugiat occaecat ad deserunt tempor enim aute ex fugiat aliqua irure eiusmod mollit.",
+      "image": null
+    },
+    {
+      "id": "skopee2",
+      "name": "iPhone 13 Pro Max",
+      "price": 1000000,
+      "description": "Esse enim elit commodo nostrud tempor pariatur.",
+      "image": null
+    },
+    {
+      "id": "skopee3",
+      "name": "iPhone 14 Pro Max",
+      "price": 1000000,
+      "description": "Fugiat commodo incididunt tempor incididunt elit voluptate aliquip do minim.",
+      "image": null
+    }
+  ]
+}
