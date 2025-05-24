@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import placeholder from "../assets/placeholder.png";
 import { formatVND } from "../util/formatVND";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { deleteProduct } from "../features/productSlice";
 import { toast } from "react-toastify";
 import { addToCart } from "../features/cartSlice";
