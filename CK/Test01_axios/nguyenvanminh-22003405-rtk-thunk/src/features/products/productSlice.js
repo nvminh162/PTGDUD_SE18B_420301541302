@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const URL = import.meta.env.VITE_URL;
 
-export const fetchProducts = createAsyncThunk('products/fetchProducts', async (_, { rejectWithValue }) => {
+export const fetchProduct = createAsyncThunk('products/fetchProduct', async (_, { rejectWithValue }) => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
     try {
         const res = await axios.get(URL);
@@ -57,16 +57,16 @@ const productSlice = createSlice({
     extraReducers: (builder) => {
         builder
             // Fetch All
-            .addCase(fetchProducts.pending, (state) => {
+            .addCase(fetchProduct.pending, (state) => {
                 state.isLoading = true;
                 state.error = null;
             })
-            .addCase(fetchProducts.fulfilled, (state, action) => {
+            .addCase(fetchProduct.fulfilled, (state, action) => {
                 state.products = action.payload;
                 state.isLoading = false;
                 state.error = null;
             })
-            .addCase(fetchProducts.rejected, (state, action) => {
+            .addCase(fetchProduct.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
             })

@@ -4,14 +4,14 @@ import Hero from "../components/Hero";
 import useFetch from "../hooks/useFetch";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { putProduct } from "../features/productSlice";
+import { updateProduct } from "../features/productSlice";
 import { toast } from "react-toastify";
 
 const EditProduct = () => {
   const { id } = useParams();
   const URL = import.meta.env.VITE_URL;
   const { data } = useFetch(`${URL}/${id}`);
-  
+
   const isLoading = useSelector((state) => state.product.isLoading);
 
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ const EditProduct = () => {
       toast.info("Vui lòng nhập đủ các trường dữ liệu");
       return;
     }
-    dispatch(putProduct(formData));
+    dispatch(updateProduct(formData));
     toast.success("Đã cập nhật sản phẩm thành công!");
     setTimeout(() => navigate("/"), 2000);
   };
@@ -128,6 +128,10 @@ const EditProduct = () => {
                 className="h-60 w-60 mt-2 object-cover object-center"
                 src={formData.image || placeholder}
                 alt={formData.name}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = placeholder;
+                }}
               />
             </div>
           </div>

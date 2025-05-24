@@ -1,7 +1,7 @@
 import ProductCard from '../../components/ProductCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { fetchProducts } from './productSlice';
+import { fetchProduct } from './productSlice';
 import { Link } from 'react-router-dom';
 import { RotateLoader } from 'react-spinners';
 

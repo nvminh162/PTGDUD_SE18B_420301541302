@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { deleteProduct } from "../features/productSlice";
 import { toast } from "react-toastify";
-import { formatVND } from '../util/formatVND'
+import { formatVND } from "../util/formatVND";
 
 const ProductCard = ({ data }) => {
   const dispatch = useDispatch();
@@ -19,13 +19,19 @@ const ProductCard = ({ data }) => {
     <div className="border-2 border-gray-200 rounded-xl hover:scale-105">
       <img
         className="h-52 w-full object-cover object-center"
-        src={data.image || placeholder}
-        alt={data.name}
+        src={data?.image || placeholder}
+        alt={data?.name}
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = placeholder;
+        }}
       />
       <div className="m-5 space-y-5">
         <h1 className="font-bold text-base">{data.name}</h1>
         <p className="line-clamp-2">{data.description}</p>
-        <p className="font-bold text-end italic">{formatVND(Number(data.price))}đ</p>
+        <p className="font-bold text-end italic">
+          {formatVND(Number(data.price))}đ
+        </p>
         <div className="flex justify-between font-bold">
           <Link
             to={`/product/${data.id}`}

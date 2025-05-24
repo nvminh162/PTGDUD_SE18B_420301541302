@@ -5,7 +5,7 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { postProduct } from "../features/productSlice";
+import { createProduct } from "../features/productSlice";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ const AddProduct = () => {
       toast.info("Vui lòng nhập đủ các trường dữ liệu");
       return;
     }
-    dispatch(postProduct(formData));
+    dispatch(createProduct(formData));
     toast.success("Đã thêm sản phẩm thành công!");
     setTimeout(() => navigate("/"), 2000);
   };

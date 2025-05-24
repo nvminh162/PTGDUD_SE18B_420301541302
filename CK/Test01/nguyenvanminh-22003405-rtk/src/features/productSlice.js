@@ -2,79 +2,95 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const URL = import.meta.env.VITE_URL;
 
-export const fetchProducts = createAsyncThunk(
-  "products/fetchProducts",
+export const fetchProduct = createAsyncThunk(
+  "products/fetchProduct",
   async (_, { rejectWithValue }) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      const response = await fetch(URL);
-      if (!response.ok) {
-        throw new Error((await response.json())?.message || "Lấy dữ liệu thất bại");
-      }
-      return await response.json();
-    } catch (err) {
-      return rejectWithValue(err.message || "Có lỗi xảy ra khi lấy dữ liệu");
-    }
+    await new Promise((resolve) => setTimeout(resolve, 2000)); //Mô phỏng loading
+    return await fetch(URL)
+      .then((res) => {
+        if (!res.ok) throw new Error(`${res.status}: ${res.statusText}`);
+        return res.json();
+      })
+      .catch((err) =>
+        rejectWithValue(err.message || "Không thể kết nối đến server")
+      );
   }
 );
 
-export const postProduct = createAsyncThunk(
-  "products/postProduct",
-  async (newProduct, { rejectWithValue }) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      const response = await fetch(URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newProduct),
-      });
-      if (!response.ok) {
-        throw new Error((await response.json())?.message || "Thêm thất bại");
-      }
-      return await response.json();
-    } catch (err) {
-      return rejectWithValue(err.message || "Có lỗi xảy ra khi thêm");
-    }
+export const fetchProductById = createAsyncThunk(
+  "products/fetchProductById",
+  async (id, { rejectWithValue }) => {
+    await new Promise((resolve) => setTimeout(resolve, 2000)); //Mô phỏng loading
+    return await fetch(`${URL}/${id}`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`${res.status}: ${res.statusText}`);
+        return res.json();
+      })
+      .catch((err) =>
+        rejectWithValue(err.message || "Không thể kết nối đến server")
+      );
   }
 );
 
-export const putProduct = createAsyncThunk(
-  "products/putProduct",
-  async (putProduct, { rejectWithValue }) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      const { id, ...data } = putProduct;
-      const response = await fetch(`${URL}/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) {
-        throw new Error((await response.json())?.message || "Cập nhật thất bại");
-      }
-      return await response.json();
-    } catch (err) {
-      return rejectWithValue(err.message || "Có lỗi xảy ra khi cập nhật");
-    }
+export const createProduct = createAsyncThunk(
+  "products/createProduct",
+  async (product, { rejectWithValue }) => {
+    await new Promise((resolve) => setTimeout(resolve, 2000)); //Mô phỏng loading
+    return await fetch(URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(product),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`${res.status}: ${res.statusText}`);
+        return res.json();
+      })
+      .catch((err) =>
+        rejectWithValue(err.message || "Không thể kết nối đến server")
+      );
+  }
+);
+
+export const updateProduct = createAsyncThunk(
+  "products/updateProduct",
+  async (product, { rejectWithValue }) => {
+    await new Promise((resolve) => setTimeout(resolve, 2000)); //Mô phỏng loading
+    return await fetch(`${URL}/${product.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(product),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`${res.status}: ${res.statusText}`);
+        return res.json();
+      })
+      .catch((err) =>
+        rejectWithValue(err.message || "Không thể kết nối đến server")
+      );
   }
 );
 
 export const deleteProduct = createAsyncThunk(
   "products/deleteProduct",
   async (id, { rejectWithValue }) => {
-    try {
-      const response = await fetch(`${URL}/${id}`, { method: "DELETE" });
-      if (!response.ok) {
-        throw new Error((await response.json())?.message || "Xóa sản phẩm thất bại");
-      }
-      return id;
-    } catch (err) {
-      return rejectWithValue(err.message || "Có lỗi xảy ra khi xóa sản phẩm");
-    }
+    await new Promise((resolve) => setTimeout(resolve, 2000)); //Mô phỏng loading
+    return await fetch(`${URL}/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error(`${res.status}: ${res.statusText}`);
+        return id;
+      })
+      .catch((err) =>
+        rejectWithValue(err.message || "Không thể kết nối đến server")
+      );
   }
 );
 
@@ -88,47 +104,47 @@ const productSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      //fetchProducts
-      .addCase(fetchProducts.pending, (state) => {
+      //fetchProduct
+      .addCase(fetchProduct.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchProducts.fulfilled, (state, action) => {
+      .addCase(fetchProduct.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
         state.list = action.payload;
       })
-      .addCase(fetchProducts.rejected, (state, action) => {
+      .addCase(fetchProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
-      //postProduct
-      .addCase(postProduct.pending, (state) => {
+      //createProduct
+      .addCase(createProduct.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(postProduct.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.error = null;
+      .addCase(createProduct.fulfilled, (state, action) => {
         state.list.push(action.payload);
+        state.isLoading = false;
+        state.error = null;
       })
-      .addCase(postProduct.rejected, (state, action) => {
+      .addCase(createProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
-      //putProduct
-      .addCase(putProduct.pending, (state) => {
+      //updateProduct
+      .addCase(updateProduct.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(putProduct.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.error = null;
+      .addCase(updateProduct.fulfilled, (state, action) => {
         state.list = state.list.map((item) =>
           item.id === action.payload.id ? action.payload : item
         );
+        state.isLoading = false;
+        state.error = null;
       })
-      .addCase(putProduct.rejected, (state, action) => {
+      .addCase(updateProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
@@ -138,9 +154,9 @@ const productSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.list = state.list.filter((item) => item.id !== action.payload);
         state.isLoading = false;
         state.error = null;
-        state.list = state.list.filter((item) => item.id !== action.payload);
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.isLoading = false;

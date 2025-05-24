@@ -31,6 +31,10 @@ const ProductDetail = () => {
         className="w-full h-80 object-cover object-center"
         src={data.image || placeholder}
         alt={data.name}
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = placeholder;
+        }}
       />
       <div className="space-y-6 p-8">
         <h1 className="font-bold text-xl">{data.name}</h1>

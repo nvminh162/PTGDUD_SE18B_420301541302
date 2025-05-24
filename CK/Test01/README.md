@@ -83,13 +83,13 @@ PATCH /posts/1
 DELETE /posts/1
 ```
 
-
 ## `FRONT-END (use redux-toolkit)`
 
 ### 1. Initial Project with Vite
 ```
 npm create vite@latest
 ```
+
 ### 2. Install dependencies default
 ```
 cd nguyenvanminh-22003405-rtk
@@ -97,6 +97,7 @@ cd nguyenvanminh-22003405-rtk
 ```
 npm i
 ```
+
 ### 3. Install tailwindcss (copy full -> paste)
 - Install library
 ```
@@ -116,10 +117,12 @@ export default defineConfig({
 ```
 @import "tailwindcss";
 ```
+
 ### 4. Install react-router-dom
 ```
 npm i react-router-dom
 ```
+
 ### 5. Redux
 ```
 npm i react-redux
@@ -130,10 +133,13 @@ npm i @reduxjs/toolkit
 ```
 echo "VITE_URL=http://localhost:3000/products" > .env
 ```
+
 ### 6. Install toastify (notify message)
 ```
+
 npm i react-toastify
 ```
+
 ### 7. Install uuid (create random id -> LIKE MONGODB)
 ```
 npm i uuid
@@ -148,11 +154,58 @@ npm install react-spinners
 ```
 Bài này dùng kỹ thuật base64 để lưu ảnh
 ```
+
 *Script để cài nhanh rất cả các thư viện trên*
 ```
 npm install @reduxjs/toolkit @tailwindcss/vite react react-dom react-redux react-router-dom react-spinners react-toastify tailwindcss uuid
 ```
+
 **GOOD YOUR EXAM!**
 
-
 @nvminh162
+
+===
+
+Nội dung thi: Redux Tool kit
+React Router
+Tailwind CSS
+Hooks và Custom Hook
+Fetch API
+Json server để tạo API
+
+https://www.mockaroo.com/docs
+
+https://mockapi.io/
+
+===
+
+```
+import { ClockLoader, MoonLoader, GridLoader } from "react-spinners";
+
+if (isLoading)
+    return (
+      <div className="flex justify-center items-center mt-20">
+        <MoonLoader />
+        <div className="font-bold ml-3">Loading ...</div>
+      </div>
+    );
+if (error)
+    return (
+      <div className="flex justify-center items-center mt-20">
+        <ClockLoader />
+        <div className="font-bold ml-3">Lỗi API: {error}</div>
+      </div>
+    );
+
+if (list.length === 0)
+    return (
+      <div className="flex justify-center items-center mt-20 space-x-2">
+        <GridLoader />
+        <div className="font-bold ml-3">Chưa có sản phẩm trong kho</div>
+        <br />
+        <Link className="hover:underline" to={"/add-product"}>
+          Thêm sản phẩm
+        </Link>
+      </div>
+    );
+```

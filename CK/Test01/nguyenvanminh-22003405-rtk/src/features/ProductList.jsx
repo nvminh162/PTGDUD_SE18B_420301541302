@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "./productSlice";
-import { ClockLoader, MoonLoader, SquareLoader } from "react-spinners";
+import { fetchProduct } from "./productSlice";
+import { ClockLoader, MoonLoader, GridLoader } from "react-spinners";
 
 const ProductList = () => {
   const dispatch = useDispatch();
@@ -12,7 +12,7 @@ const ProductList = () => {
   const list = useSelector((state) => state.product.list);
 
   useEffect(() => {
-    dispatch(fetchProducts()); //Gọi để fetch data vào state.list
+    dispatch(fetchProduct());
   }, [dispatch]);
 
   if (isLoading)
@@ -34,7 +34,7 @@ const ProductList = () => {
   if (list.length === 0)
     return (
       <div className="flex justify-center items-center mt-20 space-x-2">
-        <SquareLoader />
+        <GridLoader />
         <div className="font-bold ml-3">Chưa có sản phẩm trong kho</div>
         <br />
         <Link className="hover:underline" to={"/add-product"}>
