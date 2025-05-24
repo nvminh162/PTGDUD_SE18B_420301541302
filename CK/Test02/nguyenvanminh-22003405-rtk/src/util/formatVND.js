@@ -1,0 +1,1 @@
+export const formatVND = (price) => Number(price).toLocaleString("vi-VN");
